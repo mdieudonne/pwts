@@ -1,22 +1,24 @@
 import React from 'react';
+import {BrowserRouter} from 'react-router-dom'
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {Button} from '@material-ui/core';
 
-import SimpleBottomNavigation from './Components/BottomNavigation/BottomNavigation'
+import SimpleBottomNavigation from './components/SimpleBottomNavigation/SimpleBottomNavigation'
 
 function App() {
   return (
-    <React.Fragment>
-      <CssBaseline />
+    <BrowserRouter>
+      <CssBaseline/>
       <Container disableGutters={true}>
-        <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} />
+        <Typography component="div" style={{backgroundColor: '#cfe8fc', height: '100vh'}}/>
         <Button color="primary">Hello World</Button>;
-        <SimpleBottomNavigation></SimpleBottomNavigation>
+        <SimpleBottomNavigation/>
       </Container>
-    </React.Fragment>
-    )
+    </BrowserRouter>
+  )
 }
 
 export default App
