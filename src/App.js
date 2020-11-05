@@ -1,22 +1,20 @@
 import React from 'react';
-import {BrowserRouter} from 'react-router-dom'
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import {Button} from '@material-ui/core';
+import {BrowserRouter, Route} from 'react-router-dom'
 
 import SimpleBottomNavigation from './components/SimpleBottomNavigation/SimpleBottomNavigation'
+import Home from "./containers/Home/Home";
+import Box from "@material-ui/core/Box";
+import SimpleAppBar from "./components/SimpleAppBar/SimpleAppBar";
 
 function App() {
+
   return (
     <BrowserRouter>
-      <CssBaseline/>
-      <Container disableGutters={true}>
-        <Typography component="div" style={{backgroundColor: '#cfe8fc', height: '100vh'}}/>
-        <Button color="primary">Hello World</Button>;
+      <Box height="100vh" display="flex" flexDirection="column">
+        <SimpleAppBar/>
+        <Route path="/" exact render={() => <Home/>}/>
         <SimpleBottomNavigation/>
-      </Container>
+      </Box>
     </BrowserRouter>
   )
 }
