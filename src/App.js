@@ -5,6 +5,7 @@ import SimpleBottomNavigation from './components/SimpleBottomNavigation/SimpleBo
 import Home from "./containers/Home/Home";
 import Box from "@material-ui/core/Box";
 import SimpleAppBar from "./components/SimpleAppBar/SimpleAppBar";
+import Reactions from "./containers/Reactions/Reactions";
 
 function App() {
 
@@ -12,7 +13,8 @@ function App() {
     <BrowserRouter>
       <Box height="100vh" display="flex" flexDirection="column">
         <SimpleAppBar/>
-        <Route path="/" exact render={() => <Home/>}/>
+        <Route path="/" exact component={Home}/>
+        <Route path="/reactions" component={Reactions}/>
         <SimpleBottomNavigation/>
       </Box>
     </BrowserRouter>

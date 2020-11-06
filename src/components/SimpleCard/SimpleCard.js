@@ -11,11 +11,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    cursor: 'pointer',
   },
   title: {
     fontSize: 14,
@@ -27,25 +23,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleCard(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <Card className={classes.root} onClick={props.clicked}>
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Entrainement
+          { props.content.title }
         </Typography>
         <Typography variant="h5" component="h2">
-          Réactions de bases
+          { props.content.name}
         </Typography>
         <Typography className={classes.description} variant="body2" component="p">
-          Affiche de manière aléatoire
-          <br/>
-          les réactions de bases à éxécuter.
+          {props.content.description}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">C'est parti !</Button>
+        <Button size="small">{props.content.button}</Button>
       </CardActions>
     </Card>
   );

@@ -10,16 +10,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const cards = [
+  {
+    title: 'Entrainement',
+    name: 'Réactions de bases',
+    description: 'Affiche de manière aléatoire <br/> les réactions de bases à éxécuter.',
+    button: 'C\'est parti !',
+    link: '/reactions'
+  },
+]
+
 function Home() {
   const classes = useStyles();
   let history = useHistory();
 
   return (
     <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={12} md={4}>
-          <SimpleCard clicked={() => history.push('/reactions')}/>
-        </Grid>
+      <Grid container justify="center">
+        {cards.map((card, index) => (
+          <Grid item xs={12} md={4} key={index}>
+            <SimpleCard content={card} clicked={() => history.push(card.link)}/>
+          </Grid>
+        ))}
       </Grid>
     </div>
   )
