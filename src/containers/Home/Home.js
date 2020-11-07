@@ -1,39 +1,38 @@
-import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, {useEffect, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
 import SimpleCard from "../../components/SimpleCard/SimpleCard";
 import {useHistory} from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-}));
-
-const cards = [
-  {
-    title: 'Entrainement',
-    name: 'Réactions de bases',
-    description: 'Affiche de manière aléatoire <br/> les réactions de bases à éxécuter.',
-    button: 'C\'est parti !',
-    link: '/reactions'
-  },
-]
-
 function Home() {
-  const classes = useStyles();
-  let history = useHistory();
+  useEffect(() => {
+      setHeight(getHeight())
+    }
+  )
+  const getHeight = () => document.body.offsetHeight - 64 - 56 - 20
+
+  const [height, setHeight] = useState(getHeight());
+  console.log(height)
+
+  const cards = [
+    {
+      title: 'Entrainement',
+      name: 'Réactions de bases',
+      description: 'Affiche de manière aléatoire <br/> les réactions de bases à éxécuter.',
+      button: 'C\'est parti !',
+      link: '/reactions'
+    }
+  ]
+
+  const history = useHistory();
 
   return (
-    <div className={classes.root}>
-      <Grid container justify="center">
-        {cards.map((card, index) => (
-          <Grid item xs={12} md={4} key={index}>
-            <SimpleCard content={card} clicked={() => history.push(card.link)}/>
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+    <Grid style={{height}}
+          container
+          direction="column"
+          justify="center"
+          alignItems="center">
+      <SimpleCard content={cards[0]} clicked={() => history.push(cards[0].link)}/>
+    </Grid>
   )
 }
 

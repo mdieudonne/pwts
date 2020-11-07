@@ -28,10 +28,10 @@ export default function SimpleCard(props) {
     <Card className={classes.root} onClick={props.clicked}>
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          { props.content.title }
+          {props.content.title}
         </Typography>
         <Typography variant="h5" component="h2">
-          { props.content.name}
+          {props.content.name}
         </Typography>
         <Typography className={classes.description} variant="body2" component="p">
           {props.content.description}

@@ -20,7 +20,7 @@ export default function DiscreteSlider(props) {
       </Typography>
       <Slider
         value={props.value}
-        disabled={!!props.status}
+        disabled={props.status}
         defaultValue={props.min}
         aria-labelledby={props.name}
         step={props.step}

@@ -39,7 +39,6 @@ function SimpleBottomNavigation() {
       showLabels
     >
       <BottomNavigationAction label="Accueil" icon={<AccessibilityIcon/>}/>
-      <BottomNavigationAction label="Réactions" icon={<AccessibilityIcon/>}/>
     </BottomNavigation>
   );
 }

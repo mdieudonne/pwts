@@ -1,134 +1,294 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import SimpleSlider from "../../components/SimpleSlider/SimpleSlider";
+import useInterval from "@use-it/interval";
+import Actions from './Actions/Actions'
+import {Typography} from "@material-ui/core";
+import Commands from "./Commands/Commands";
 import Box from "@material-ui/core/Box";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-}));
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormLabel from "@material-ui/core/FormLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 function Reactions() {
+  useEffect(() => {
+      setHeight(getHeight())
+    }
+  )
+  const getHeight = () => document.body.offsetHeight - 64 - 56 - 20 - 50
 
-  const classes = useStyles();
+  const [height, setHeight] = useState(getHeight());
+  console.log(height)
+
   const reactions = [
     {
-      name: 'tan sau',
-      meaning: 'dispersing hand'
+      name: 'tan sao',
+      left: false,
+      meaning: 'dispersing hand',
+      part: 'A'
     },
     {
-      name: 'gaun sau',
-      meaning: 'cultivating arm'
+      name: 'tan sao',
+      left: true,
+      meaning: 'dispersing hand',
+      part: 'A'
     },
     {
-      name: 'gum sau',
-      meaning: 'pressing hand'
+      name: 'gan sao',
+      left: false,
+      meaning: 'cultivating arm',
+      part: 'A'
     },
     {
-      name: 'kau sau',
-      meaning: 'detaining hand'
+      name: 'gan sao',
+      left: true,
+      meaning: 'cultivating arm',
+      part: 'A'
     },
     {
-      name: 'fook sau',
-      meaning: 'controlling hand'
+      name: 'gam sao',
+      left: false,
+      meaning: 'pressing hand',
+      part: 'A'
     },
     {
-      name: 'pak sau',
-      meaning: 'slapping hand'
+      name: 'gam sao',
+      left: true,
+      meaning: 'pressing hand',
+      part: 'A'
     },
     {
-      name: 'bong sau dessus',
-      meaning: 'wing arm'
+      name: 'kao sao',
+      left: false,
+      meaning: 'detaining hand',
+      part: 'A'
     },
     {
-      name: 'bong sau dessous',
-      meaning: 'wing arm'
+      name: 'kao sao',
+      left: true,
+      meaning: 'detaining hand',
+      part: 'A'
     },
     {
-      name: 'jam sau',
-      meaning: 'sinking hand'
+      name: 'fook sao',
+      left: false,
+      meaning: 'controlling hand',
+      part: 'A'
     },
     {
-      name: 'quan sau',
-      meaning: 'circling hand'
+      name: 'fook sao',
+      left: true,
+      meaning: 'controlling hand',
+      part: 'A'
+    },
+    {
+      name: 'pak sao',
+      left: false,
+      meaning: 'slapping hand',
+      part: 'B'
+    },
+    {
+      name: 'pak sao',
+      left: true,
+      meaning: 'slapping hand',
+      part: 'B'
+    },
+    {
+      name: 'bong sao dessus',
+      left: false,
+      meaning: 'wing arm',
+      part: 'B'
+    },
+    {
+      name: 'bong sao dessus',
+      left: true,
+      meaning: 'wing arm',
+      part: 'B'
+    },
+    {
+      name: 'bong sao dessous',
+      left: false,
+      meaning: 'wing arm',
+      part: 'B'
+    },
+    {
+      name: 'bong sao dessous',
+      left: true,
+      meaning: 'wing arm',
+      part: 'B'
+    },
+    {
+      name: 'jam sao',
+      left: false,
+      meaning: 'sinking hand',
+      part: 'B'
+    },
+    {
+      name: 'jam sao',
+      left: true,
+      meaning: 'sinking hand',
+      part: 'B'
+    },
+    {
+      name: 'kwan sao',
+      left: false,
+      meaning: 'circling hand',
+      part: 'B'
+    },
+    {
+      name: 'kwan sao',
+      left: true,
+      meaning: 'circling hand',
+      part: 'B'
     },
   ]
 
-  const [iterationCounter, setIterationCounter] = React.useState(0);
-  const [iterationNumber, setIterationNumber] = React.useState(10);
-  const [timer, setTimer] = React.useState(2);
-  const [intervals, setIntervals] = React.useState(2);
+  const [index, setIndex] = useState(0);
+  const [count, setCount] = useState(0);
+  const [maxLoop, setMaxLoop] = React.useState(1);
+  const [loop, setLoop] = React.useState(0);
+  const [userDelay, setUserDelay] = React.useState(3)
+  const [delay, setDelay] = React.useState(null);
   const [status, setStatus] = React.useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [random, setRandom] = React.useState(false);
+  const [partA, setPartA] = React.useState(true);
+  const [partB, setPartB] = React.useState(true);
+
+  useInterval(() => {
+    if (loop === maxLoop) {
+      handleStop()
+    }
+
+    if (count === getReactions().length - 1) {
+      setLoop(currentLoop => currentLoop + 1)
+      setCount(0)
+    }
+
+    if (random) {
+      setIndex(Math.floor(Math.random() * getReactions().length))
+    } else {
+      setIndex(currentIndex => currentIndex + 1);
+    }
+    setCount(currentCount => currentCount + 1)
+  }, isPaused ? null : delay);
 
   const handleStart = () => {
-    setTimer(setInterval(() => {
-      setIterationCounter(oldIterationCounter => {
-        if (oldIterationCounter === iterationNumber - 1) {
-          handleStop()
-        }
-        return oldIterationCounter + 1
-      })
-    }, intervals * 1000,))
     setStatus(true)
+    setIsPaused(false)
+    setDelay(userDelay * 1000)
   }
-
 
   const handleStop = () => {
-    clearInterval(timer)
     setStatus(false)
-    setIterationCounter(0)
+    setDelay(null)
+    setCount(0)
+    setIndex(0)
+    setLoop(0)
   }
 
-  const onChangeInterval = (event, newValue) => {
-    setIntervals(newValue)
+  const handlePause = () => {
+    setIsPaused(currentIsPaused => !currentIsPaused)
   }
 
-  const onChangeIterationNumber = (event, newValue) => {
-    setIterationNumber(newValue)
+  const onChangeDelay = (event, newValue) => {
+    setUserDelay(newValue)
   }
 
-  const display = status ? <p>{reactions[iterationCounter].name}</p> : <p>Prêt ?</p>
-  const commands = !status
-    ? <Button variant="contained" onClick={handleStart}>Démarrer</Button>
-    : <Button variant="contained" onClick={handleStop}>Stop</Button>
+  const onChangeMaxLoop = (event, newValue) => {
+    setMaxLoop(newValue)
+  }
+
+  const onChangeA = (event, newValue) => {
+    setPartA(newValue)
+  }
+  const onChangeB = (event, newValue) => {
+    setPartB(newValue)
+  }
+  const onChangeRandom = (event, newValue) => {
+    setRandom(newValue)
+  }
+
+  const getReactions = () => {
+    return reactions.filter(el => eval('part' + el.part))
+  }
 
   return (
-    <div className={classes.root}>
-      <Grid container justify={"center"}>
-        <Box className={classes.root} pl={3} pr={3}>
-          <Grid item xs={12}>
-            <SimpleSlider
-              value={intervals}
-              name={'Interval'}
-              min={1}
-              max={10}
-              step={1}
-              status={status}
-              handleChange={onChangeInterval}/>
-          </Grid>
-          <Grid item xs={12}>
-            <SimpleSlider
-              value={iterationNumber}
-              name={'Répétitions'}
-              min={10}
-              max={100}
-              step={10}
-              status={status}
-              handleChange={onChangeIterationNumber}/>
-          </Grid>
-          <Grid item xs={12}>
-            {display}
-            Counter: {iterationCounter}
-          </Grid>
-          <Grid item xs={12}>
-            {commands}
-          </Grid>
-        </Box>
+    <Grid style={{height}}
+          container
+          direction="column"
+          justify="space-between"
+          alignItems="stretch">
+      <Box align="center">
+        <SimpleSlider
+          value={userDelay}
+          name={'Interval'}
+          min={1}
+          max={10}
+          step={1}
+          status={status}
+          handleChange={onChangeDelay}/>
+      </Box>
+      <Box align="center">
+        <SimpleSlider
+          value={maxLoop}
+          name={'Répétitions'}
+          min={1}
+          max={10}
+          step={1}
+          status={status}
+          handleChange={onChangeMaxLoop}/>
+      </Box>
+      <Grid
+        container
+        direction="row"
+        align="center"
+      >
+        <Grid item xs={6}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Parties</FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                disabled={status}
+                control={<Checkbox checked={partA} onChange={onChangeA} name="A"/>}
+                label="A"
+              />
+              <FormControlLabel
+                disabled={status}
+                control={<Checkbox checked={partB} onChange={onChangeB} name="B"/>}
+                label="B"
+              />
+            </FormGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Ordre</FormLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  disabled={status}
+                  checked={random}
+                  onChange={onChangeRandom}
+                  name="Aléatoire"
+                  color="primary"
+                />
+              }
+              label="Aléatoire"
+            />
+          </FormControl>
+        </Grid>
       </Grid>
-    </div>
+      {!status
+        ? <Typography variant="h5" component="h2" align="center">Prêt ?</Typography>
+        : <Typography variant="h5" component="h2" align="center">GO !</Typography>
+      }
+      <Actions status={status} reaction={getReactions()[index]}/>
+      <Commands status={status} isPaused={isPaused} handleStart={handleStart} handleStop={handleStop}
+                handlePause={handlePause}/>
+    </Grid>
   )
 }
 
