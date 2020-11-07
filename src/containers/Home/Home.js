@@ -8,7 +8,7 @@ function Home() {
       setHeight(getHeight())
     }
   )
-  const getHeight = () => document.body.offsetHeight - 64 - 56 - 20
+  const getHeight = () => window.innerHeight - 64 - 56 - 20
 
   const [height, setHeight] = useState(getHeight());
   console.log(height)

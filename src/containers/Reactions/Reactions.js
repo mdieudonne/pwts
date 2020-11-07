@@ -17,7 +17,7 @@ function Reactions() {
       setHeight(getHeight())
     }
   )
-  const getHeight = () => document.body.offsetHeight - 64 - 56 - 20 - 50
+  const getHeight = () => window.innerHeight - 64 - 56 - 20 - 50
 
   const [height, setHeight] = useState(getHeight());
   console.log(height)
