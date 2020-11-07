@@ -57,34 +57,40 @@ function Reactions() {
     },
   ]
 
-  const [index, setIndex] = React.useState(0);
+  const [iterationCounter, setIterationCounter] = React.useState(0);
+  const [iterationNumber, setIterationNumber] = React.useState(10);
   const [timer, setTimer] = React.useState(2);
-  const [interval, setIntervalTime] = React.useState(2);
-  const [number, setNumber] = React.useState(10);
+  const [intervals, setIntervals] = React.useState(2);
   const [status, setStatus] = React.useState(false);
 
   const handleStart = () => {
     setTimer(setInterval(() => {
-      setIndex(index + 1)
-    }, interval * 1000,))
+      setIterationCounter(oldIterationCounter => {
+        if (oldIterationCounter === iterationNumber - 1) {
+          handleStop()
+        }
+        return oldIterationCounter + 1
+      })
+    }, intervals * 1000,))
     setStatus(true)
   }
+
 
   const handleStop = () => {
     clearInterval(timer)
     setStatus(false)
-    setIndex(0)
+    setIterationCounter(0)
   }
 
-  const onChangeNumber = (value) => {
-    setNumber(value)
+  const onChangeInterval = (event, newValue) => {
+    setIntervals(newValue)
   }
 
-  const onChangeInterval = (value) => {
-    setIntervalTime(value)
+  const onChangeIterationNumber = (event, newValue) => {
+    setIterationNumber(newValue)
   }
 
-  const display = status ? <p>{reactions[index].name}</p> : <p>Prêt ?</p>
+  const display = status ? <p>{reactions[iterationCounter].name}</p> : <p>Prêt ?</p>
   const commands = !status
     ? <Button variant="contained" onClick={handleStart}>Démarrer</Button>
     : <Button variant="contained" onClick={handleStop}>Stop</Button>
@@ -95,6 +101,7 @@ function Reactions() {
         <Box className={classes.root} pl={3} pr={3}>
           <Grid item xs={12}>
             <SimpleSlider
+              value={intervals}
               name={'Interval'}
               min={1}
               max={10}
@@ -104,15 +111,17 @@ function Reactions() {
           </Grid>
           <Grid item xs={12}>
             <SimpleSlider
+              value={iterationNumber}
               name={'Répétitions'}
               min={10}
               max={100}
               step={10}
               status={status}
-              handleChange={onChangeNumber}/>
+              handleChange={onChangeIterationNumber}/>
           </Grid>
           <Grid item xs={12}>
             {display}
+            Counter: {iterationCounter}
           </Grid>
           <Grid item xs={12}>
             {commands}
