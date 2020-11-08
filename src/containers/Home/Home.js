@@ -1,18 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import '../../App.css'
+
 import Grid from '@material-ui/core/Grid';
 import SimpleCard from "../../components/SimpleCard/SimpleCard";
 import {useHistory} from "react-router-dom";
 
 function Home() {
-  useEffect(() => {
-      setHeight(getHeight())
-    }
-  )
-  const getHeight = () => window.innerHeight - 64 - 56 - 20
-
-  const [height, setHeight] = useState(getHeight());
-  console.log(height)
-
   const cards = [
     {
       title: 'Entrainement',
@@ -26,7 +19,7 @@ function Home() {
   const history = useHistory();
 
   return (
-    <Grid style={{height}}
+    <Grid className="fillHeight"
           container
           direction="column"
           justify="center"

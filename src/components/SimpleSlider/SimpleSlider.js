@@ -19,16 +19,16 @@ export default function DiscreteSlider(props) {
         {props.name}
       </Typography>
       <Slider
+        disabled={props.isRunning}
         value={props.value}
-        disabled={props.status}
-        defaultValue={props.min}
         aria-labelledby={props.name}
-        step={props.step}
-        marks
+        onChange={props.handleChange}
         min={props.min}
         max={props.max}
+        step={props.step}
+        defaultValue={props.min}
+        marks
         valueLabelDisplay="on"
-        onChange={props.handleChange}
       />
     </Box>
   );

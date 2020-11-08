@@ -7,11 +7,14 @@ import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    marginTop: 20,
-    height: 120,
-    backgroundColor: "lightblue",
+    height: '100%',
   },
+  left: {
+    backgroundColor: "dark",
+  },
+  right:{
+
+  }
 }));
 
 function Actions(props) {
@@ -20,10 +23,10 @@ function Actions(props) {
   const card = (
     <Card className={classes.root}>
       <CardContent>
-        <Typography color="textSecondary" gutterBottom align={props.reaction.left ? 'left' : 'right'}>
+        <Typography gutterBottom variant="h5" component="h2">
           {props.reaction.left ? 'Gauche' : 'Droite'}
         </Typography>
-        <Typography variant="h5" component="h2" align={props.reaction.left ? 'left' : 'right'}>
+        <Typography variant="h3" component="h3" align={props.reaction.left ? 'left' : 'right'}>
           {props.reaction.name}
         </Typography>
       </CardContent>
@@ -32,15 +35,16 @@ function Actions(props) {
 
   return (props.status ?
       <Grid
+
         container
         direction="row"
         justify="center"
         alignItems="center"
       >
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{height:'100%'}}>
           {props.reaction.left ? card : null}
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{height:'100%'}}>
           {!props.reaction.left ? card : null}
         </Grid>
       </Grid>

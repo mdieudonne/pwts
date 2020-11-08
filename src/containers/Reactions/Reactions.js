@@ -1,26 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
+import '../../App.css'
 import Grid from "@material-ui/core/Grid";
-import SimpleSlider from "../../components/SimpleSlider/SimpleSlider";
+import UpperPanel from "./UpperPanel/UpperPanel";
 import useInterval from "@use-it/interval";
-import Actions from './Actions/Actions'
-import {Typography} from "@material-ui/core";
-import Commands from "./Commands/Commands";
-import Box from "@material-ui/core/Box";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormLabel from "@material-ui/core/FormLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import LowerPanel from "./LowerPanel/LowerPanel";
 
 function Reactions() {
-  useEffect(() => {
-      setHeight(getHeight())
-    }
-  )
-  const getHeight = () => window.innerHeight - 64 - 56 - 20 - 50
-
-  const [height, setHeight] = useState(getHeight());
-  console.log(height)
 
   const reactions = [
     {
@@ -145,149 +130,142 @@ function Reactions() {
     },
   ]
 
-  const [index, setIndex] = useState(0);
-  const [count, setCount] = useState(0);
-  const [maxLoop, setMaxLoop] = React.useState(1);
-  const [loop, setLoop] = React.useState(0);
-  const [userDelay, setUserDelay] = React.useState(3)
-  const [delay, setDelay] = React.useState(null);
-  const [status, setStatus] = React.useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [random, setRandom] = React.useState(false);
-  const [partA, setPartA] = React.useState(true);
-  const [partB, setPartB] = React.useState(true);
-
-  useInterval(() => {
-    if (loop === maxLoop) {
-      handleStop()
-    }
-
-    if (count === getReactions().length - 1) {
-      setLoop(currentLoop => currentLoop + 1)
-      setCount(0)
-    }
-
-    if (random) {
-      setIndex(Math.floor(Math.random() * getReactions().length))
-    } else {
-      setIndex(currentIndex => currentIndex + 1);
-    }
-    setCount(currentCount => currentCount + 1)
-  }, isPaused ? null : delay);
-
   const handleStart = () => {
-    setStatus(true)
-    setIsPaused(false)
-    setDelay(userDelay * 1000)
+    setStatus({...defaultStatus, isRunning: true})
+    setSettings(currentSettings => ({...currentSettings, delay: currentSettings.userDelay * 1000}))
   }
 
   const handleStop = () => {
-    setStatus(false)
-    setDelay(null)
-    setCount(0)
-    setIndex(0)
-    setLoop(0)
+    setStatus({...defaultStatus})
+    setSettings(currentSettings => ({...currentSettings, delay: null}))
   }
 
   const handlePause = () => {
-    setIsPaused(currentIsPaused => !currentIsPaused)
+    setStatus(currentStatus => ({...currentStatus, isPaused: true}))
   }
 
   const onChangeDelay = (event, newValue) => {
-    setUserDelay(newValue)
+    setSettings(currentSettings => ({...currentSettings, userDelay: newValue}))
   }
 
   const onChangeMaxLoop = (event, newValue) => {
-    setMaxLoop(newValue)
+    setSettings(currentSettings => ({...currentSettings, maxLoop: newValue}))
   }
 
   const onChangeA = (event, newValue) => {
-    setPartA(newValue)
-  }
-  const onChangeB = (event, newValue) => {
-    setPartB(newValue)
-  }
-  const onChangeRandom = (event, newValue) => {
-    setRandom(newValue)
+    setSettings(currentSettings => {
+      if (!newValue && !currentSettings.partB) {
+        return currentSettings
+      }
+      return {...currentSettings, partA: newValue}
+    })
   }
 
+  const onChangeB = (event, newValue) => {
+    setSettings(currentSettings => {
+      if (!newValue && !currentSettings.partA) {
+        return currentSettings
+      }
+      return {...currentSettings, partB: newValue}
+    })
+  }
+
+  const onChangeLeft = (event, newValue) => {
+    setSettings(currentSettings => {
+      if (!newValue && !currentSettings.right) {
+        return currentSettings
+      }
+      return {...currentSettings, left: newValue}
+    })
+  }
+
+  const onChangeRight = (event, newValue) => {
+    setSettings(currentSettings => {
+      if (!newValue && !currentSettings.left) {
+        return currentSettings
+      }
+      return {...currentSettings, right: newValue}
+    })
+  }
+
+  const onChangeRandom = (event, newValue) => {
+    setSettings(currentSettings => ({...currentSettings, random: newValue}))
+  }
+
+  const [settings, setSettings] = useState({
+    partA: true,
+    partB: true,
+    random: false,
+    left: true,
+    right: true,
+    delay: null,
+    userDelay: 2,
+    maxLoop: 1,
+    onChangeA,
+    onChangeB,
+    onChangeLeft,
+    onChangeRight,
+    onChangeRandom,
+    onChangeDelay,
+    onChangeMaxLoop,
+  })
+
+  const defaultStatus = {
+    isRunning: false,
+    isPaused: false,
+    index: 0,
+    count: 0,
+    loop: 0,
+    handleStart,
+    handleStop,
+    handlePause,
+  }
+  const [status, setStatus] = useState({...defaultStatus})
+
+  useInterval(() => {
+    if (status.loop === settings.maxLoop) {
+      handleStop()
+    }
+
+    if (status.count === getReactions().length - 1) {
+      setStatus(currentStatus => ({...currentStatus, loop: currentStatus.loop + 1, count: 0, index: 0}))
+    }
+
+    if (settings.random) {
+      const randomIndex = Math.floor(Math.random() * getReactions().length)
+      setStatus(currentStatus => ({...currentStatus, index: randomIndex, count: currentStatus.count + 1}))
+    } else {
+      setStatus(currentStatus => ({...currentStatus, index: currentStatus.index + 1, count: currentStatus.count + 1}))
+    }
+  }, status.isPaused ? null : settings.delay);
+
   const getReactions = () => {
-    return reactions.filter(el => eval('part' + el.part))
+    return reactions.filter(el => {
+      if (settings.left && settings.right) {
+        return (
+          settings['part' + el.part]
+        )
+      } else {
+        return (
+          settings['part' + el.part]
+          && settings.left === el.left
+        )
+      }
+    })
   }
 
   return (
-    <Grid style={{height}}
+    <Grid className="fillHeight"
           container
-          direction="column"
+          direction="row"
           justify="space-between"
           alignItems="stretch">
-      <Box align="center">
-        <SimpleSlider
-          value={userDelay}
-          name={'Interval'}
-          min={1}
-          max={10}
-          step={1}
-          status={status}
-          handleChange={onChangeDelay}/>
-      </Box>
-      <Box align="center">
-        <SimpleSlider
-          value={maxLoop}
-          name={'Répétitions'}
-          min={1}
-          max={10}
-          step={1}
-          status={status}
-          handleChange={onChangeMaxLoop}/>
-      </Box>
-      <Grid
-        container
-        direction="row"
-        align="center"
-      >
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Parties</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                disabled={status}
-                control={<Checkbox checked={partA} onChange={onChangeA} name="A"/>}
-                label="A"
-              />
-              <FormControlLabel
-                disabled={status}
-                control={<Checkbox checked={partB} onChange={onChangeB} name="B"/>}
-                label="B"
-              />
-            </FormGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Ordre</FormLabel>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  disabled={status}
-                  checked={random}
-                  onChange={onChangeRandom}
-                  name="Aléatoire"
-                  color="primary"
-                />
-              }
-              label="Aléatoire"
-            />
-          </FormControl>
-        </Grid>
+      <Grid item xs={12} sm={4}>
+        <UpperPanel settings={settings} status={status}/>
       </Grid>
-      {!status
-        ? <Typography variant="h5" component="h2" align="center">Prêt ?</Typography>
-        : <Typography variant="h5" component="h2" align="center">GO !</Typography>
-      }
-      <Actions status={status} reaction={getReactions()[index]}/>
-      <Commands status={status} isPaused={isPaused} handleStart={handleStart} handleStop={handleStop}
-                handlePause={handlePause}/>
+      <Grid item xs={12} sm={8}>
+        <LowerPanel status={status} reactions={getReactions()}/>
+      </Grid>
     </Grid>
   )
 }
