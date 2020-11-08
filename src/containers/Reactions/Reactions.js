@@ -10,90 +10,84 @@ function Reactions() {
   const reactions = [
     {
       name: 'tan sao',
-      left: false,
+      left: true,
       meaning: 'dispersing hand',
       part: 'A'
     },
     {
       name: 'tan sao',
-      left: true,
+      left: false,
       meaning: 'dispersing hand',
       part: 'A'
     },
     {
       name: 'gan sao',
-      left: false,
+      left: true,
       meaning: 'cultivating arm',
       part: 'A'
     },
     {
       name: 'gan sao',
-      left: true,
+      left: false,
       meaning: 'cultivating arm',
       part: 'A'
     },
     {
       name: 'gam sao',
-      left: false,
+      left: true,
       meaning: 'pressing hand',
       part: 'A'
     },
     {
       name: 'gam sao',
-      left: true,
+      left: false,
       meaning: 'pressing hand',
       part: 'A'
     },
     {
       name: 'kao sao',
-      left: false,
+      left: true,
       meaning: 'detaining hand',
       part: 'A'
     },
     {
       name: 'kao sao',
-      left: true,
+      left: false,
       meaning: 'detaining hand',
       part: 'A'
     },
     {
       name: 'fook sao',
-      left: false,
+      left: true,
       meaning: 'controlling hand',
       part: 'A'
     },
     {
       name: 'fook sao',
-      left: true,
+      left: false,
       meaning: 'controlling hand',
       part: 'A'
     },
     {
       name: 'pak sao',
-      left: false,
+      left: true,
       meaning: 'slapping hand',
       part: 'B'
     },
     {
       name: 'pak sao',
-      left: true,
+      left: false,
       meaning: 'slapping hand',
       part: 'B'
     },
     {
       name: 'bong sao dessus',
-      left: false,
+      left: true,
       meaning: 'wing arm',
       part: 'B'
     },
     {
       name: 'bong sao dessus',
-      left: true,
-      meaning: 'wing arm',
-      part: 'B'
-    },
-    {
-      name: 'bong sao dessous',
       left: false,
       meaning: 'wing arm',
       part: 'B'
@@ -101,30 +95,36 @@ function Reactions() {
     {
       name: 'bong sao dessous',
       left: true,
+      meaning: 'wing arm',
+      part: 'B'
+    },
+    {
+      name: 'bong sao dessous',
+      left: false,
       meaning: 'wing arm',
       part: 'B'
     },
     {
       name: 'jam sao',
-      left: false,
+      left: true,
       meaning: 'sinking hand',
       part: 'B'
     },
     {
       name: 'jam sao',
-      left: true,
+      left: false,
       meaning: 'sinking hand',
       part: 'B'
     },
     {
       name: 'kwan sao',
-      left: false,
+      left: true,
       meaning: 'circling hand',
       part: 'B'
     },
     {
       name: 'kwan sao',
-      left: true,
+      left: false,
       meaning: 'circling hand',
       part: 'B'
     },
@@ -136,12 +136,12 @@ function Reactions() {
   }
 
   const handleStop = () => {
-    setStatus({...defaultStatus})
     setSettings(currentSettings => ({...currentSettings, delay: null}))
+    setStatus({...defaultStatus})
   }
 
   const handlePause = () => {
-    setStatus(currentStatus => ({...currentStatus, isPaused: true}))
+    setStatus(currentStatus => ({...currentStatus, isPaused: !currentStatus.isPaused}))
   }
 
   const onChangeDelay = (event, newValue) => {
@@ -215,6 +215,7 @@ function Reactions() {
     isPaused: false,
     index: 0,
     count: 0,
+    totalCount: 0,
     loop: 0,
     handleStart,
     handleStop,
@@ -225,18 +226,33 @@ function Reactions() {
   useInterval(() => {
     if (status.loop === settings.maxLoop) {
       handleStop()
+      return
     }
-
-    if (status.count === getReactions().length - 1) {
-      setStatus(currentStatus => ({...currentStatus, loop: currentStatus.loop + 1, count: 0, index: 0}))
-    }
-
     if (settings.random) {
       const randomIndex = Math.floor(Math.random() * getReactions().length)
-      setStatus(currentStatus => ({...currentStatus, index: randomIndex, count: currentStatus.count + 1}))
+      if (status.count === getReactions().length - 1) {
+        setStatus(currentStatus => ({...currentStatus, loop: currentStatus.loop + 1, count: 0, index: randomIndex}))
+      } else {
+        setStatus(currentStatus => ({
+          ...currentStatus,
+          index: randomIndex,
+          count: currentStatus.count + 1,
+          totalCount: currentStatus.totalCount + 1
+        }))
+      }
     } else {
-      setStatus(currentStatus => ({...currentStatus, index: currentStatus.index + 1, count: currentStatus.count + 1}))
+      if (status.count === getReactions().length - 1) {
+        setStatus(currentStatus => ({...currentStatus, loop: currentStatus.loop + 1, count: 0, index: 0}))
+      }else {
+        setStatus(currentStatus => ({
+          ...currentStatus,
+          index: currentStatus.index + 1,
+          count: currentStatus.count + 1,
+          totalCount: currentStatus.totalCount + 1
+        }))
+      }
     }
+
   }, status.isPaused ? null : settings.delay);
 
   const getReactions = () => {
@@ -260,11 +276,11 @@ function Reactions() {
           direction="row"
           justify="space-between"
           alignItems="stretch">
-      <Grid item xs={12} sm={4}>
+      <Grid item xs={12} sm={6} md={4}>
         <UpperPanel settings={settings} status={status}/>
       </Grid>
-      <Grid item xs={12} sm={8}>
-        <LowerPanel status={status} reactions={getReactions()}/>
+      <Grid item xs={12} sm={6} md={8}>
+        <LowerPanel settings={settings} status={status} reactions={getReactions()}/>
       </Grid>
     </Grid>
   )
