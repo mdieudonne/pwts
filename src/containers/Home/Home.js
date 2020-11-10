@@ -10,7 +10,7 @@ function Home() {
     {
       title: 'Entrainement',
       name: 'Réactions de bases',
-      description: 'Affiche de manière aléatoire <br/> les réactions de bases à éxécuter.',
+      description: 'Affiche de manière aléatoire les réactions de bases.',
       button: 'C\'est parti !',
       link: '/reactions'
     }
