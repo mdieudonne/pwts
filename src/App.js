@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import {BrowserRouter, Route} from 'react-router-dom'
+import routes from './route'
 
 import SimpleAppBar from "./components/SimpleAppBar/SimpleAppBar";
-import Home from "./containers/Home/Home";
-import Reactions from "./containers/Reactions/Reactions";
+import Paper from "@material-ui/core/Paper";
 import SimpleBottomNavigation from './components/SimpleBottomNavigation/SimpleBottomNavigation'
-import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {deepOrange, deepPurple, lightBlue, orange} from "@material-ui/core/colors";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,10 +48,18 @@ function App() {
       <div className={classes.root}>
         <BrowserRouter>
           <SimpleAppBar darkState={darkState} handleThemeChange={handleThemeChange}/>
-          <Paper className="fillHeight" square elevation={0} style={{backgroundColor: darkTheme.palette.background.default}}>
+          <Paper className="fillHeight" square elevation={0}
+                 style={{backgroundColor: darkTheme.palette.background.default}}>
 
-          <Route path="/" exact component={Home}/>
-          <Route path="/reactions" component={Reactions}/>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                component={route.component}
+              />
+            ))}
+
           </Paper>
           <SimpleBottomNavigation/>
         </BrowserRouter>
