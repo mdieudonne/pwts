@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 function LinearProgressWithLabel(props) {
-  console.log(props)
   return (
     <Box display="flex" alignItems="center">
       <Box width="100%" mr={1}>

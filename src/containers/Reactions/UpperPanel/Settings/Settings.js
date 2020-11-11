@@ -42,7 +42,7 @@ function Settings(props) {
         direction="row"
         align="center"
       >
-        <Grid item xs={4} align={"center"}>
+        <Grid item xs={6} align={"center"}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Parties</FormLabel>
             <FormGroup>
@@ -59,26 +59,7 @@ function Settings(props) {
             </FormGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={4} align={"center"}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Directions</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                disabled={props.status.isRunning}
-                control={<Checkbox checked={props.settings.left} onChange={props.settings.onChangeLeft}
-                                   name="Gauche"/>}
-                label="Gauche"
-              />
-              <FormControlLabel
-                disabled={props.status.isRunning}
-                control={<Checkbox checked={props.settings.right} onChange={props.settings.onChangeRight}
-                                   name="Droite"/>}
-                label="Droite"
-              />
-            </FormGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={4} align={"center"}>
+        <Grid item xs={6} align={"center"}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Ordre</FormLabel>
             <FormControlLabel

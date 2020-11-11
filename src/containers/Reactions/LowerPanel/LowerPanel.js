@@ -5,10 +5,10 @@ import SimpleLinearProgressWithLabel
   from "../../../components/SimpleLinearProgressWithLabel/SimpleLinearProgressWithLabel";
 
 function LowerPanel(props) {
-  let progress = 0
 
-  if (props.status.isRunning) {
-   progress = Math.round(((props.status.totalCount + 1) / (props.reactions.length * props.settings.maxLoop)) * 100)
+  let progress = 0
+  if(props.status.isRunning) {
+    progress = Math.ceil(((props.status.totalCount + 1 )/ (props.reactions.length * props.settings.maxLoop)) * 100)
   }
 
   return (
@@ -21,7 +21,10 @@ function LowerPanel(props) {
       <Grid item xs={12}>
         <SimpleLinearProgressWithLabel value={progress}/>
       </Grid>
-      <Actions status={props.status} reaction={props.reactions[props.status.index]}/>
+      {props.status.isRunning
+        ? <Actions status={props.status} reaction={props.reactions.find(el => el.number === props.status.number)}/>
+        : null
+      }
     </Grid>
   )
 }
