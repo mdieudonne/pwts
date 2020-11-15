@@ -1,5 +1,6 @@
 import Home from './containers/Home/Home'
 import Reactions from './containers/Reactions/Reactions'
+import Association from "./containers/Association/Association";
 
 const routes = [
   {
@@ -10,6 +11,10 @@ const routes = [
   {
     path: "/reactions",
     component: Reactions
+  },
+  {
+    path: "/association",
+    component: Association
   },
 ]
 

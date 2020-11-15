@@ -6,6 +6,12 @@ import useInterval from "@use-it/interval";
 import LowerPanel from "./LowerPanel/LowerPanel";
 
 function Reactions() {
+  // componentDidMount
+  useEffect(() => {
+    document.title = 'PWTSRA Training App - Réactions de bases des mains'
+    document.getElementsByTagName("meta")["title"].content = 'Programme d\'entraînement aux réactions de bases des mains';
+    document.getElementsByTagName("meta")["description"].content = 'Programme d\'entraînement chronométré aux réactions de base des mains du Kung Fu Wing Tsun';
+  }, []);
 
   const reactions = [
     {
