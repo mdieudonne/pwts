@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react'
 import '../../App.css'
-import Grid from "@material-ui/core/Grid";
+import {Grid} from "@material-ui/core";
 import UpperPanel from "./UpperPanel/UpperPanel";
-import useInterval from "@use-it/interval";
 import LowerPanel from "./LowerPanel/LowerPanel";
+import useInterval from "@use-it/interval";
+
+import reactions from '../../models/reactions'
 
 function Reactions() {
   // componentDidMount
@@ -13,149 +15,6 @@ function Reactions() {
     document.getElementsByTagName("meta")["description"].content = 'Programme d\'entraînement chronométré aux réactions de base des mains du Kung Fu Wing Tsun';
   }, []);
 
-  const reactions = [
-    {
-      number: 1,
-      name: 'tan sao',
-      left: true,
-      meaning: 'dispersing hand',
-      part: 'A',
-    },
-    {
-      number: 2,
-      name: 'tan sao',
-      left: false,
-      meaning: 'dispersing hand',
-      part: 'A',
-    },
-    {
-      number: 3,
-      name: 'gan sao',
-      left: true,
-      meaning: 'cultivating arm',
-      part: 'A',
-    },
-    {
-      number: 4,
-      name: 'gan sao',
-      left: false,
-      meaning: 'cultivating arm',
-      part: 'A',
-    },
-    {
-      number: 5,
-      name: 'gam sao',
-      left: true,
-      meaning: 'pressing hand',
-      part: 'A',
-    },
-    {
-      number: 6,
-      name: 'gam sao',
-      left: false,
-      meaning: 'pressing hand',
-      part: 'A',
-    },
-    {
-      number: 7,
-      name: 'kao sao',
-      left: true,
-      meaning: 'detaining hand',
-      part: 'A',
-    },
-    {
-      number: 8,
-      name: 'kao sao',
-      left: false,
-      meaning: 'detaining hand',
-      part: 'A',
-    },
-    {
-      number: 9,
-      name: 'fook sao',
-      left: true,
-      meaning: 'controlling hand',
-      part: 'A',
-    },
-    {
-      number: 10,
-      name: 'fook sao',
-      left: false,
-      meaning: 'controlling hand',
-      part: 'A',
-    },
-    {
-      number: 11,
-      name: 'pak sao',
-      left: true,
-      meaning: 'slapping hand',
-      part: 'B',
-    },
-    {
-      number: 12,
-      name: 'pak sao',
-      left: false,
-      meaning: 'slapping hand',
-      part: 'B',
-    },
-    {
-      number: 13,
-      name: 'bong sao dessus',
-      left: true,
-      meaning: 'wing arm',
-      part: 'B',
-    },
-    {
-      number: 14,
-      name: 'bong sao dessus',
-      left: false,
-      meaning: 'wing arm',
-      part: 'B',
-    },
-    {
-      number: 15,
-      name: 'bong sao dessous',
-      left: true,
-      meaning: 'wing arm',
-      part: 'B',
-    },
-    {
-      number: 16,
-      name: 'bong sao dessous',
-      left: false,
-      meaning: 'wing arm',
-      part: 'B',
-    },
-    {
-      number: 17,
-      name: 'jam sao',
-      left: true,
-      meaning: 'sinking hand',
-      part: 'B',
-    },
-    {
-      number: 18,
-      name: 'jam sao',
-      left: false,
-      meaning: 'sinking hand',
-      part: 'B',
-    },
-    {
-      number: 19,
-      name: 'kwan sao',
-      left: true,
-      meaning: 'circling hand',
-      part: 'B',
-    },
-    {
-      number: 20,
-      name: 'kwan sao',
-      left: false,
-      meaning: 'circling hand',
-      part: 'B',
-    },
-  ]
-
   const handleStart = () => {
     setStatus(currentStatus => ({...currentStatus, isRunning: true}))
     setSettings(currentSettings => ({...currentSettings, delay: currentSettings.userDelay * 1000}))
@@ -163,7 +22,7 @@ function Reactions() {
 
   const handleStop = () => {
     setSettings(currentSettings => ({...currentSettings, delay: null}))
-    setStatus(currentStatus => ({...defaultStatus, number: availableNumbers[0]}))
+    setStatus({...defaultStatus})
   }
 
   const handlePause = () => {
@@ -200,6 +59,10 @@ function Reactions() {
     setSettings(currentSettings => ({...currentSettings, random: newValue}))
   }
 
+  const getFilteredReactions = () => {
+    return reactions.filter(el => settings['part' + el.part])
+  }
+
   const [settings, setSettings] = useState({
     partA: true,
     partB: true,
@@ -214,9 +77,8 @@ function Reactions() {
     onChangeMaxLoop,
   })
 
-  const getFilteredReactions = () => {
-    return reactions.filter(el => settings['part' + el.part])
-  }
+  const [availableNumbers, setAvailableNumbers] = useState(getFilteredReactions().map(reaction => reaction.number))
+
   const defaultStatus = {
     isRunning: false,
     isPaused: false,
@@ -229,6 +91,7 @@ function Reactions() {
     handleStop,
     handlePause,
   }
+
   const [status, setStatus] = useState({...defaultStatus})
 
   const [tick, setTick] = useState(0)
@@ -291,7 +154,9 @@ function Reactions() {
     }
   }, [settings, status.loop]);
 
-  const [availableNumbers, setAvailableNumbers] = useState(getFilteredReactions().map(reaction => reaction.number))
+  useInterval(() => {
+    setTick(tick + 1)
+  }, status.isPaused && status.isRunning ? null : settings.delay);
 
   const resetAvailableNumber = () => {
     const newAvailableNumbers = getFilteredReactions().map(reaction => reaction.number)
@@ -316,10 +181,6 @@ function Reactions() {
     setAvailableNumbers(availableNumbersRandom)
     setStatus(currentStatus => ({...currentStatus, number: availableNumbersRandom[0]}))
   }
-
-  useInterval(() => {
-    setTick(tick + 1)
-  }, status.isPaused && status.isRunning ? null : settings.delay);
 
   return (
     <Grid className="fillHeight"

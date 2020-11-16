@@ -10,7 +10,7 @@ import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {deepOrange, deepPurple, lightBlue, orange} from "@material-ui/core/colors";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     width: '100vw',

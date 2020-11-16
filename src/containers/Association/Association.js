@@ -1,13 +1,6 @@
 import React, {useEffect} from 'react';
-import useTheme from "@material-ui/core/styles/useTheme";
-import {makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grid from "@material-ui/core/Grid";
+import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from '@material-ui/core';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
 import logo from '../../assets/images/pwtsra-logo.png';
 import logoLight from '../../assets/images/pwtsra-logo-light.png';
 
@@ -17,11 +10,12 @@ const useStyles = makeStyles({
     ,
   },
   media: {
-    height: 150,
+    height: 0,
+    paddingTop: '56.25%', // 16:9
   },
 });
 
-function Association(props) {
+function Association() {
   // componentDidMount
   useEffect(() => {
     document.title = 'PWTSRA Training App - Lien vers le site officiel'
@@ -32,6 +26,13 @@ function Association(props) {
   const classes = useStyles();
   const theme = useTheme();
 
+  const imgStyle = {
+    maxWidth: 300,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    display: 'block',
+  }
+
   return (
     <Grid className="fillHeight"
           container
@@ -40,11 +41,9 @@ function Association(props) {
           alignItems="center">
       <Card className={classes.root}>
         {/*<CardActionArea>*/}
-        <CardMedia
-          className={classes.media}
-          image={theme.palette.type === 'dark' ? logo : logoLight}
-          title="Contemplative Reptile"
-        />
+        <CardMedia>
+          <img src={theme.palette.type === 'dark' ? logo : logoLight} style={imgStyle}/>
+        </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             Association
@@ -52,7 +51,7 @@ function Association(props) {
           <Typography variant="body2" color="textSecondary" component="p">
             Progressive Wing Tsun System Rhône Alpes propose des cours de Wing Tsun / Wing Chun Kung fu à Lyon.
             PWTSRA ce sont des techniques d'apprentissage modernes avec des cours structurés et des programmes adaptés
-            au niveau des élèves. En savoir plus
+            au niveau des élèves.
           </Typography>
         </CardContent>
         {/*</CardActionArea>*/}

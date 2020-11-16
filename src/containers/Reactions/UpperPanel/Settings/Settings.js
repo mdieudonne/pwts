@@ -1,11 +1,6 @@
 import React from 'react'
-import Grid from "@material-ui/core/Grid";
+import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid} from "@material-ui/core";
 import SimpleSlider from "../../../../components/SimpleSlider/SimpleSlider";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 
 function Settings(props) {
 

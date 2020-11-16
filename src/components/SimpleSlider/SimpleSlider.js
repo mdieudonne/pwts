@@ -1,8 +1,6 @@
 import React from 'react';
+import {Box, Slider, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles({
   root: {

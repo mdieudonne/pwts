@@ -1,33 +1,33 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Switch from "@material-ui/core/Switch";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import {AppBar, Switch, Toolbar, Typography} from '@material-ui/core';
+import {makeStyles, useTheme} from "@material-ui/core/styles";
+import logo from "../../assets/images/pwtsra-logo.png";
+import logoLight from "../../assets/images/pwtsra-logo-light.png";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
+  menuButton: {},
   title: {
     flexGrow: 1,
   },
+  img: {
+    height: 44,
+  }
 }));
 
 
 function SimpleAppBar(props) {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
-
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Typography variant="h6" className={classes.title}>
-          PWTS
+        <Typography variant="div" className={classes.title}>
+          <img src={theme.palette.type === 'dark' ? logo : logoLight} className={classes.img}/>
         </Typography>
         <Switch checked={props.darkState} onChange={props.handleThemeChange}/>
       </Toolbar>

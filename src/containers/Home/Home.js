@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import '../../App.css'
-
-import Grid from '@material-ui/core/Grid';
+import {Grid} from '@material-ui/core';
 import SimpleCard from "../../components/SimpleCard/SimpleCard";
 import {useHistory} from "react-router-dom";
 

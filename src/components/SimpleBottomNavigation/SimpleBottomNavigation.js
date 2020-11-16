@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react';
-
+import {BottomNavigation, BottomNavigationAction} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import {useHistory} from "react-router-dom";
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
 
 const useStyles = makeStyles({
   stickToBottom: {
@@ -19,7 +17,7 @@ function SimpleBottomNavigation() {
   const routes = ['/', '/reactions']
 
   useEffect(() => {
-    history.listen((location, action) => {
+    history.listen((location) => {
       setValue(routes.findIndex(el => el === location.pathname))
     })
   })

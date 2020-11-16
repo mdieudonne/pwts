@@ -1,20 +1,15 @@
 import React from 'react';
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
+import {Card, CardContent, Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
   },
   left: {
     backgroundColor: "dark",
   },
-  right:{
-
-  }
+  right: {}
 }));
 
 function Actions(props) {
@@ -41,10 +36,10 @@ function Actions(props) {
         justify="center"
         alignItems="center"
       >
-        <Grid item xs={6} style={{height:'100%'}}>
+        <Grid item xs={6} style={{height: '100%'}}>
           {props.reaction.left ? card : null}
         </Grid>
-        <Grid item xs={6} style={{height:'100%'}}>
+        <Grid item xs={6} style={{height: '100%'}}>
           {!props.reaction.left ? card : null}
         </Grid>
       </Grid>
